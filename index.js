@@ -112,6 +112,8 @@ const goGreen = (firstLine, secondLine, thirdLine, forthLine) => {
   redTimer(currentPosition, firstLine, secondLine, thirdLine, forthLine);
 };
 
+
+
 const redTimer = (
   currentPosition,
   firstLine,
@@ -137,7 +139,6 @@ const redTimer = (
       time = forthLine;
       waitingTime = totalTime - time;
     }
-
     timer.forEach((time) => time);
 
     let decrementTime = time;
