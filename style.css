@@ -29,21 +29,21 @@
 .red {
   width: 90px;
   height: 90px;
-  background-color: rgb(255, 0, 0);
+  border: 1px solid red;
   border-radius: 50%;
   margin: 10px;
 }
 .yellow {
   width: 90px;
   height: 90px;
-  background-color: rgb(255, 255, 159);
+  border: 1px solid yellow;
   border-radius: 50%;
   margin: 10px;
 }
 .green {
   width: 90px;
   height: 90px;
-  background-color: green;
+  border: 1px solid green;
   border-radius: 50%;
   margin: 10px;
 }
@@ -81,13 +81,17 @@ button {
 .timeZone {
   margin: 10px 0;
 }
-
+.green{
+  color: rgb(0, 255, 0);
+  color: rgb(255, 0, 0)
+}
 .timer {
   border-radius: 10px;
   height: 40px;
   background-color: rgb(1, 26, 48);
   padding: 10px;
-  color: rgb(255, 3, 3);
+  color: rgb(255, 255, 255);
+
   font-weight: 600;
 }
 

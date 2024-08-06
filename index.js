@@ -1,33 +1,81 @@
+let totalTime = 0;
+let totalLight = 4;
+let currentPosition = 0
+
+let green = document.querySelectorAll("#green");
+let yellow = document.querySelectorAll("#yellow");
+let red = document.querySelectorAll("#red");
+let timer = document.querySelector("#timer");
+
 const startTrafficLight = () => {
-  let totalTime = document.getElementById("totalTime").value;
-  console.log(totalTime);
+  // let totalTime = parseInt(document.getElementById("userInput").value)
+  let totalTime = 12;
+
+  if (!totalTime || totalTime < 0) {
+    alert("Enter valid time");
+    return;
+  }
+
+  let goTime = totalTime / totalLight;
+  let waitingTime = totalTime - goTime;
+  goGreen(goTime);
 };
 
-let totalTime = 100;
+const goGreen = (time) => {
+  let interval = setInterval(() => {
+    green.forEach((item,currentPosition) => {
+      item.style.backgroundColor = "green";
+      });
+      if(time < 1){
+        green.forEach((item,currentPosition) => {
+          item.style.backgroundColor = "";
+          });
+      clearInterval(interval);
+      stopRed(time)
+    } 
+    time--
+  }, 1000);
+  countTimer(time);
+};
 
+const stopRed = (time) => {
+  console.log(time);
+  
+  let waitingTime = totalTime - time;
+  let interval = setInterval(() => {
+    red.forEach((item) => {
+      item.style.backgroundColor = "red";
+    });
 
+    if(time < 1){
+      red.forEach((item) => {
+        item.style.backgroundColor = "";
+      });
+    clearInterval(interval);
+      }
 
-const stopTrafficLights = () => {
-  let yellowLight = document.querySelectorAll("#yellow");
-  let light = true;
+    waitingTime--
+  }, 1000);
+  countTimer(waitingTime);
+};
 
-  yellowLight.forEach((item) => {
-    if (light) {
-      setInterval(() => {
-        item.style.backgroundColor = "yellow";
-        light = false;
-      }, 500);
-    } else {
-      setInterval(() => {
-        item.style.backgroundColor = "rgb(255, 255, 159);";
-        light = true;
-      }, 1000);
+const countTimer = (time) => {
+  let interval = setInterval(() => {
+    timer.textContent = time;
+    time--;
+    if (time < 1) {
+      timer.textContent = "stop";
+      clearInterval(interval);
     }
-  });
-
-  // setInterval(()=>{
-  //     yellowLight.style.backgroundColor = "yellow"
-  // },1000)
+  }, 1000);
 };
 
-stopTrafficLights();
+const yellowBlinking = () =>{
+  let interval = setInterval(() => {
+    yellow.forEach((item)=>{
+      item.style.backgroundColor = "yellow"
+    })
+  })
+}
+
+yellowBlinking()
