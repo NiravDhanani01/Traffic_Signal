@@ -81,10 +81,7 @@ button {
 .timeZone {
   margin: 10px 0;
 }
-.green{
-  color: rgb(0, 255, 0);
-  color: rgb(255, 0, 0)
-}
+
 .timer {
   border-radius: 10px;
   height: 40px;
