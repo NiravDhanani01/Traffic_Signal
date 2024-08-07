@@ -181,4 +181,5 @@ const checkYellowLight = () => {
     item.style.backgroundColor = "yellow";
     item.style.boxShadow = " 0px 0px 40px yellow";
   });
+  timer.forEach((time) => (time.style.color = "yellow"));
 };
