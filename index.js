@@ -11,13 +11,18 @@ let secondLine = document.getElementById("2nd");
 let thirdLine = document.getElementById("3rd");
 let forthLine = document.getElementById("4th");
 
-const startTrafficLight = () => {
-  totalTime = parseInt(document.getElementById("userInput").value);
-  // let totalTime = 100;
-  if (isNaN(totalTime) || totalTime < 100) {
-    alert("Please enter a valid number greater than 100");
-    return;
-  }
+
+
+const startTrafficLight = async () => {
+  let timeData = await fetch("./data.json");
+  let response = await timeData.json();
+
+  // totalTime = parseInt(document.getElementById("userInput").value);
+  let totalTime = 8;
+  // if (isNaN(totalTime) || totalTime < 100) {
+  //   alert("Please enter a valid number greater than 100");
+  //   return;
+  // }
 
   let line1 = parseInt(firstLine.value);
   let line2 = parseInt(secondLine.value);
@@ -26,7 +31,7 @@ const startTrafficLight = () => {
 
   let finalTime = line1 + line2 + line3 + line4;
 
-  if (finalTime > 100 || finalTime < 100) {
+  if (finalTime !== 100) {
     alert("enter time ratio must be Equal to 100");
     return;
   }
@@ -36,7 +41,33 @@ const startTrafficLight = () => {
   thirdLine = Math.floor((totalTime * line3) / 100);
   forthLine = Math.floor((totalTime * line4) / 100);
 
-  goGreen(firstLine, secondLine, thirdLine, forthLine);
+  let currentDate = new Date();
+  let hours = currentDate.getHours().toString().padStart(2, 0);
+  let minutes = currentDate.getMinutes().toString().padStart(2, 0);
+
+  let realTime = `${hours}${minutes}`;
+
+  response.map((item) => {
+    let separateStartTime = item.startTime.split("/");
+    let separateEndTime = item.endTime.split("/");
+
+    let startHours = separateStartTime[0].padStart(2, 0);
+    let startMinute = separateStartTime[1].padStart(2, 0);
+    let separateEndHour = separateEndTime[0].padStart(2, 0);
+    let separateEndMinute = separateEndTime[1].padStart(2, 0);
+
+    let startTime = `${startHours}${startMinute}`;
+    let endTime = `${separateEndHour}${separateEndMinute}`;
+
+    if (
+      Number(realTime) >= Number(startTime) &&
+      Number(realTime) <= Number(endTime)
+    ) {
+      checkYellowLight();
+    } else {
+      goGreen(firstLine, secondLine, thirdLine, forthLine);
+    }
+  });
 
   document.getElementById("userInput").value = "";
   document.getElementById("1st").value = " ";
@@ -45,27 +76,24 @@ const startTrafficLight = () => {
   document.getElementById("4th").value = " ";
 };
 
+
+
 // set timer according to ratio, other wise all equal
 const goGreen = (firstLine, secondLine, thirdLine, forthLine) => {
   let time;
-  let waitingTime;
 
   function update() {
     if (currentPosition == 0) {
       time = firstLine;
-      waitingTime = totalTime - time;
     }
     if (currentPosition == 1) {
       time = secondLine;
-      waitingTime = totalTime - time;
     }
     if (currentPosition == 2) {
       time = thirdLine;
-      waitingTime = totalTime - time;
     }
     if (currentPosition == 3) {
       time = forthLine;
-      waitingTime = totalTime - time;
     }
 
     // set light according to time
@@ -94,7 +122,13 @@ const goGreen = (firstLine, secondLine, thirdLine, forthLine) => {
     countdown = setInterval(() => {
       timer[currentPosition].innerText = `${decrementTime} s`;
       timer[currentPosition].style.color = "green";
-      // updateRedTimers(currentPosition, firstLine, secondLine, thirdLine, forthLine);
+      redTimerUpdate(
+        currentPosition,
+        firstLine,
+        secondLine,
+        thirdLine,
+        forthLine
+      );
       decrementTime--;
       if (decrementTime < 0) {
         currentPosition++;
@@ -106,45 +140,52 @@ const goGreen = (firstLine, secondLine, thirdLine, forthLine) => {
   update();
 };
 
-// const updateRedTimers = (currentPosition, firstLine, secondLine, thirdLine, forthLine) => {
-//   let totalPassedTime = times.slice(0, currentPosition).reduce((acc, time) => acc + time, 0);
-//   times.forEach((time, index) => {
-//     if (index !== currentPosition) {
-//       let redTime = totalPassedTime + currentGreenTime - (index > currentPosition ? times[index] : 0);
-//       redTime = redTime % totalTime;
-//       timer[index].innerText = `${redTime} s`;
-//       timer[index].style.color = "red";
-//     }
-//   });
-// };
 
-// const inputTime = "07:28";
-// const endTime = "08:50";
 
-// const checkYellowLight = () => {
-//   const now = new Date();
-//   const currentHourMinute = now.toTimeString().slice(0, 5); // HH:MM format
+const redTimerUpdate = (
+  currentPosition,
+  firstLine,
+  secondLine,
+  thirdLine,
+  forthLine
+) => {
+  let waitingTime;
 
-//   if (currentHourMinute >= inputTime && currentHourMinute <= endTime) {
-//     activateYellowLight();
-//   }
-// };
+  timer.forEach((time, index) => {
+    if (index !== currentPosition) {
+      time.style.color = "red";
+    }
+    if (currentPosition == 1) {
+      waitingTime = firstLine;
+    }
+    if (currentPosition == 2) {
+      waitingTime = firstLine * 2;
+    }
+    if (currentPosition == 3) {
+      waitingTime = firstLine * 3;
+    }
+    if (currentPosition == 4) {
+      currentPosition = 0;
+      waitingTime = firstLine * 4;
+    }
 
-// const activateYellowLight = () => {
-//   const yellowLight = document.querySelectorAll("#yellow");
-//   yellowLight.forEach((item)=>{
-//     item.style.backgroundColor = "yellow";
-//     item.style.boxShadow = "0px 0px 40px yellow";
-//   })
+    console.log(waitingTime);
 
-//   green.forEach(light => {
-//     light.style.backgroundColor = "transparent";
-//     light.style.boxShadow = "none";
-//   });
-//   red.forEach(light => {
-//     light.style.backgroundColor = "transparent";
-//     light.style.boxShadow = "none";
-//   });
-// };
+    let remainingTIme = setInterval(() => {
+      time[currentPosition + 1].innerText = waitingTime;
+      waitingTime--;
 
-// checkYellowLight();
+      if (waitingTime < 1) {
+        clearInterval(remainingTIme);
+      }
+    }, 1000);
+  });
+};
+
+const checkYellowLight = () => {
+  yellow.forEach((item) => {
+    item.style.backgroundColor = "yellow";
+    item.style.boxShadow = " 0px 0px 40px yellow";
+  });
+  console.log("done");
+};
