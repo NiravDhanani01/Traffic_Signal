@@ -219,7 +219,7 @@ const redLightTimer = (
   //     }, 1000);
   //   }, 2000);
 };
-
+// 
 const checkYellowLight = () => {
   yellow.forEach((item) => {
     let blinking = setInterval(() => {
