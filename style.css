@@ -6,6 +6,15 @@
   margin: 0 auto;
 }
 
+body {
+  background: linear-gradient(
+    0deg,
+    rgba(54, 78, 96, 1) 13%,
+    rgba(0, 131, 163, 1) 64%
+  );
+  height: 100vh;
+  color: aliceblue;
+}
 .center {
   display: flex;
   justify-content: center;
@@ -84,8 +93,8 @@ button {
 
 .timer {
   border-radius: 10px;
-  height: 40px;
-  background-color: rgb(1, 26, 48);
+  height: 50px;
+  background-color: rgb(0, 59, 65);
   padding: 10px;
   color: rgb(255, 255, 255);
 
@@ -97,5 +106,3 @@ p {
   font-size: 25px;
   align-content: center;
 }
-
-
