@@ -1,17 +1,14 @@
 [
-    {
-        "startTime" : "10/56",
-        "endTime" : "12/19"
-    },
-    {
-        "startTime" : "13/56",
-        "endTime" : "14/01"
-    },
-    {
-        "startTime" : "10/56",
-        "endTime" : "12/19"
-    }
-  
-
+  {
+    "startTime": "10/56",
+    "endTime": "12/19"
+  },
+  {
+    "startTime": "13/56",
+    "endTime": "14/01"
+  },
+  {
+    "startTime": "10/56",
+    "endTime": "12/19"
+  }
 ]
-    
