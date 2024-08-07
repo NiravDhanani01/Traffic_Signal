@@ -11,8 +11,6 @@ let secondLine = document.getElementById("2nd");
 let thirdLine = document.getElementById("3rd");
 let forthLine = document.getElementById("4th");
 
-
-
 const startTrafficLight = async () => {
   let timeData = await fetch("./data.json");
   let response = await timeData.json();
@@ -76,8 +74,6 @@ const startTrafficLight = async () => {
   document.getElementById("4th").value = " ";
 };
 
-
-
 // set timer according to ratio, other wise all equal
 const goGreen = (firstLine, secondLine, thirdLine, forthLine) => {
   let time;
@@ -140,8 +136,6 @@ const goGreen = (firstLine, secondLine, thirdLine, forthLine) => {
   update();
 };
 
-
-
 const redTimerUpdate = (
   currentPosition,
   firstLine,
@@ -187,5 +181,4 @@ const checkYellowLight = () => {
     item.style.backgroundColor = "yellow";
     item.style.boxShadow = " 0px 0px 40px yellow";
   });
-  console.log("done");
 };
