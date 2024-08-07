@@ -1,9 +1,5 @@
 let totalTime = 0;
 let currentPosition = 0;
-let timer1;
-let timer2;
-let timer3;
-let timer4;
 let countdown;
 
 let green = document.querySelectorAll("#green");
@@ -53,7 +49,6 @@ const startTrafficLight = () => {
 const goGreen = (firstLine, secondLine, thirdLine, forthLine) => {
   let time;
   let waitingTime;
-  clearInterval(countdown);
 
   function update() {
     if (currentPosition == 0) {
@@ -99,6 +94,7 @@ const goGreen = (firstLine, secondLine, thirdLine, forthLine) => {
     countdown = setInterval(() => {
       timer[currentPosition].innerText = `${decrementTime} s`;
       timer[currentPosition].style.color = "green";
+      // updateRedTimers(currentPosition, firstLine, secondLine, thirdLine, forthLine);
       decrementTime--;
       if (decrementTime < 0) {
         currentPosition++;
@@ -108,58 +104,47 @@ const goGreen = (firstLine, secondLine, thirdLine, forthLine) => {
     }, 1000);
   }
   update();
-
-  redTimer(currentPosition, firstLine, secondLine, thirdLine, forthLine);
 };
 
+// const updateRedTimers = (currentPosition, firstLine, secondLine, thirdLine, forthLine) => {
+//   let totalPassedTime = times.slice(0, currentPosition).reduce((acc, time) => acc + time, 0);
+//   times.forEach((time, index) => {
+//     if (index !== currentPosition) {
+//       let redTime = totalPassedTime + currentGreenTime - (index > currentPosition ? times[index] : 0);
+//       redTime = redTime % totalTime;
+//       timer[index].innerText = `${redTime} s`;
+//       timer[index].style.color = "red";
+//     }
+//   });
+// };
 
+// const inputTime = "07:28";
+// const endTime = "08:50";
 
-const redTimer = (
-  currentPosition,
-  firstLine,
-  secondLine,
-  thirdLine,
-  forthLine
-) => {
-  let time;
-  function update() {
-    if (currentPosition == 0) {
-      time = firstLine;
-      waitingTime = totalTime - time;
-    }
-    if (currentPosition == 1) {
-      time = secondLine;
-      waitingTime = totalTime - time;
-    }
-    if (currentPosition == 2) {
-      time = thirdLine;
-      waitingTime = totalTime - time;
-    }
-    if (currentPosition == 3) {
-      time = forthLine;
-      waitingTime = totalTime - time;
-    }
-    timer.forEach((time) => time);
+// const checkYellowLight = () => {
+//   const now = new Date();
+//   const currentHourMinute = now.toTimeString().slice(0, 5); // HH:MM format
 
-    let decrementTime = time;
+//   if (currentHourMinute >= inputTime && currentHourMinute <= endTime) {
+//     activateYellowLight();
+//   }
+// };
 
-    if (currentPosition === 4) {
-      currentPosition = 0;
-    }
+// const activateYellowLight = () => {
+//   const yellowLight = document.querySelectorAll("#yellow");
+//   yellowLight.forEach((item)=>{
+//     item.style.backgroundColor = "yellow";
+//     item.style.boxShadow = "0px 0px 40px yellow";
+//   })
 
-    for (let i = 0; i < currentPosition.length; i++) {
-      countdown = setInterval(() => {
-        timer[i].innerText = `${decrementTime} s`;
-        timer[i].style.color = "red";
-        decrementTime--;
-        if (decrementTime < 0) {
-          currentPosition++;
-          clearInterval(countdown);
-          update();
-        }
-      }, 1000);
-    }
-  }
+//   green.forEach(light => {
+//     light.style.backgroundColor = "transparent";
+//     light.style.boxShadow = "none";
+//   });
+//   red.forEach(light => {
+//     light.style.backgroundColor = "transparent";
+//     light.style.boxShadow = "none";
+//   });
+// };
 
-  update();
-};
+// checkYellowLight();
