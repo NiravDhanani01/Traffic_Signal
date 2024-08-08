@@ -12,8 +12,8 @@ let thirdLine = document.getElementById("3rd");
 let forthLine = document.getElementById("4th");
 
 const startTrafficLight = () => {
-  // totalTime = parseInt(document.getElementById("userInput").value);
-  totalTime = 10;
+//   totalTime = parseInt(document.getElementById("userInput").value);
+  totalTime = 20;
   // if (isNaN(totalTime) || totalTime < 100) {
   //   alert("Please enter a valid number greater than 100");
   //   return;
@@ -100,10 +100,10 @@ const goGreen = async (firstLine, secondLine, thirdLine, forthLine) => {
         light.style.boxShadow = "none";
       });
       timer.forEach((time) => (time.style.color = "yellow"));
-
     } else {
       if (currentPosition == 0) {
         time = firstLine;
+        
       }
       if (currentPosition == 1) {
         time = secondLine;
@@ -146,6 +146,15 @@ const goGreen = async (firstLine, secondLine, thirdLine, forthLine) => {
         timer[currentPosition].innerText = `${decrementTime} s`;
         timer[currentPosition].style.color = "green";
 
+        redLightTimer(
+          currentPosition,
+          decrementTime,
+          firstLine,
+          secondLine,
+          thirdLine,
+          forthLine
+        );
+
         decrementTime--;
 
         if (decrementTime < 0) {
@@ -157,6 +166,38 @@ const goGreen = async (firstLine, secondLine, thirdLine, forthLine) => {
     }
   }
   update();
+};
+
+const redLightTimer = (
+  currentPosition,
+  decrementTime,
+  firstLine,
+  secondLine,
+  thirdLine,
+  forthLine
+) => {
+  let firstWait = decrementTime + secondLine + thirdLine + forthLine;
+  let secondWait = decrementTime;
+  let thirdWait = decrementTime + secondLine ;
+  let forthWait = decrementTime  + secondLine +thirdLine ;
+
+  timer.forEach((time, index) => {
+    if (index !== currentPosition) {
+      time.style.color = "red";
+    }
+    if (index == 1 && index !== currentPosition) {
+     timer[1].innerHTML = `${decrementTime} s`
+    }
+    if (index == 2 && index !== currentPosition ) {
+     timer[2].innerHTML = `${thirdWait} s`
+    }
+    if (index == 3 && index !== currentPosition ) {
+     timer[3].innerHTML = `${forthWait} s`
+    }
+    if (index == 0 && index !== currentPosition ) {
+     timer[0].innerHTML = `${firstWait} s`
+    }
+  });
 };
 
 const stop = () => {
