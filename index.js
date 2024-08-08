@@ -11,8 +11,8 @@ let thirdLine = document.getElementById("3rd");
 let forthLine = document.getElementById("4th");
 
 const startTrafficLight = () => {
-  //   totalTime = parseInt(document.getElementById("userInput").value);
-  totalTime = 10;
+  // totalTime = parseInt(document.getElementById("userInput").value);
+  totalTime = 12
   // if (isNaN(totalTime) || totalTime < 100) {
   //   alert("Please enter a valid number greater than 100");
   //   return;
@@ -47,22 +47,18 @@ const startTrafficLight = () => {
 };
 
 // set timer according to ratio, other wise all equal
-const goGreen = async (firstLine, secondLine, thirdLine, forthLine) => {
+const goGreen = async (firstLine, secondLine, thirdLine, fourthLine) => {
   let time;
   let timeData = await fetch("./data.json");
   let response = await timeData.json();
 
-  let time0 = totalTime + 3;
-  let time1 = secondLine;
+  let time0 = firstLine + secondLine + thirdLine + fourthLine + 3;
+  let time1 = firstLine;
   let time2 = firstLine + secondLine + 1;
   let time3 = firstLine + secondLine + thirdLine + 3;
 
-  console.log("time", time0);
-  console.log("time1", time1);
-  console.log("time2", time2);
-  console.log("time3", time3);
-
   function update() {
+    // yellow light checking
     let currentDate = new Date();
     let hours = currentDate.getHours().toString().padStart(2, 0);
     let minutes = currentDate.getMinutes().toString().padStart(2, 0);
@@ -86,7 +82,6 @@ const goGreen = async (firstLine, secondLine, thirdLine, forthLine) => {
     let check = jsonTime.find((item) => {
       return item.startTime <= realTime && item.endTime >= realTime;
     });
-
     if (check) {
       yellow.forEach((item) => {
         let blinking = setInterval(() => {
@@ -100,7 +95,7 @@ const goGreen = async (firstLine, secondLine, thirdLine, forthLine) => {
           item.style.backgroundColor = "";
         }, 2000);
       });
- 
+
       green.forEach((light) => {
         light.style.backgroundColor = "transparent";
         light.style.boxShadow = "none";
@@ -115,10 +110,9 @@ const goGreen = async (firstLine, secondLine, thirdLine, forthLine) => {
         time.style.color = "yellow";
         time.innerText = `00`;
       });
-
-
-      update()
-    } else {
+    }
+    // green and red light logic start
+    else {
       if (currentPosition == 0) {
         time = firstLine;
       }
@@ -166,8 +160,7 @@ const goGreen = async (firstLine, secondLine, thirdLine, forthLine) => {
       yellow.forEach((light) => {
         light.style.backgroundColor = "transparent";
         light.style.boxShadow = "none";
-      }); 
-
+      });
 
       // at the position light setting
       let countdown = setInterval(() => {
@@ -199,21 +192,16 @@ const goGreen = async (firstLine, secondLine, thirdLine, forthLine) => {
         time3--;
 
         if (time0 < 0) {
-          time0 = totalTime;
-          console.log("time0 total", totalTime);
+          time0 = firstLine + secondLine + thirdLine + fourthLine + 3;
         }
         if (time1 < 0) {
-          time1 = totalTime + time;
-          console.log("time1 total", totalTime + time);
-          console.log(time);
+          time1 = firstLine + secondLine + thirdLine + fourthLine + 3;
         }
         if (time2 < 0) {
-          time2 = totalTime + time;
-          console.log("time2 total", totalTime);
+          time2 = firstLine + secondLine + thirdLine + fourthLine + 3;
         }
         if (time3 < 0) {
-          time3 = totalTime + time;
-          console.log("time3 total", totalTime);
+          time3 = firstLine + secondLine + thirdLine + fourthLine + 3;
         }
 
         if (decrementTime < 0) {
