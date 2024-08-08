@@ -165,61 +165,13 @@ const redLightTimer = (
 
   let a = setInterval(() => {
     timer[3].innerHTML = `${test}`;
-    console.log(test);
     test--;
     if (test < 1) {
       clearInterval(a);
     }
   }, 1000);
-
-  let b = setInterval(() => {
-    timer[2].innerHTML = `${test}`;
-    console.log(test);
-    test--;
-    if (test < 1) {
-      clearInterval(b);
-    }
-  }, 1000);
-
-  //   let time3 = totalTime;
-  //   let time0 = firstLine;
-  //   let time1 = secondLine * 2;
-  //   let time2 = thirdLine;
-
-  //   let a = setInterval(() => {
-  //     timer[1].innerText = `${time0}`;
-  //     time0--;
-  //     if (time0 < 0) {
-  //       clearInterval(a);
-  //     }
-  //   }, 1000);
-
-  //   let b = setInterval(() => {
-  //     timer[2].innerText = `${time1}`;
-  //     time1--;
-  //     if (time1 < 0) {
-  //       clearInterval(b);
-  //     }
-  //   }, 1000);
-
-  //   let c = setInterval(() => {
-  //     timer[3].innerText = `${time2}`;
-  //     time2--;
-  //     if (time2 < 0) {
-  //       clearInterval(c);
-  //     }
-  //   });
-  //   let d = setTimeout(() => {
-  //     let dd = setInterval(() => {
-  //       timer[0].innerText = time3;
-  //       time3--;
-  //       if (time3 < 0) {
-  //         clearInterval(dd);
-  //       }
-  //     }, 1000);
-  //   }, 2000);
 };
-// 
+
 const checkYellowLight = () => {
   yellow.forEach((item) => {
     let blinking = setInterval(() => {
