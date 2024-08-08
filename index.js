@@ -11,12 +11,11 @@ let thirdLine = document.getElementById("3rd");
 let forthLine = document.getElementById("4th");
 
 const startTrafficLight = () => {
-  // totalTime = parseInt(document.getElementById("userInput").value);
-  totalTime = 12
-  // if (isNaN(totalTime) || totalTime < 100) {
-  //   alert("Please enter a valid number greater than 100");
-  //   return;
-  // }
+  totalTime = parseInt(document.getElementById("userInput").value);
+  if (isNaN(totalTime) || totalTime < 100) {
+    alert("Please enter a valid number greater than 100");
+    return;
+  }
 
   let line1 = parseInt(firstLine.value);
   let line2 = parseInt(secondLine.value);
