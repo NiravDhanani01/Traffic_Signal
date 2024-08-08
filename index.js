@@ -1,6 +1,5 @@
 let totalTime = 0;
 let currentPosition = 0;
-let countdown;
 
 let green = document.querySelectorAll("#green");
 let yellow = document.querySelectorAll("#yellow");
@@ -12,7 +11,7 @@ let thirdLine = document.getElementById("3rd");
 let forthLine = document.getElementById("4th");
 
 const startTrafficLight = () => {
-  // totalTime = parseInt(document.getElementById("userInput").value);
+  //   totalTime = parseInt(document.getElementById("userInput").value);
   totalTime = 10;
   // if (isNaN(totalTime) || totalTime < 100) {
   //   alert("Please enter a valid number greater than 100");
@@ -53,6 +52,16 @@ const goGreen = async (firstLine, secondLine, thirdLine, forthLine) => {
   let timeData = await fetch("./data.json");
   let response = await timeData.json();
 
+  let time0 = totalTime + 3;
+  let time1 = secondLine;
+  let time2 = firstLine + secondLine + 1;
+  let time3 = firstLine + secondLine + thirdLine + 3;
+
+  console.log("time", time0);
+  console.log("time1", time1);
+  console.log("time2", time2);
+  console.log("time3", time3);
+
   function update() {
     let currentDate = new Date();
     let hours = currentDate.getHours().toString().padStart(2, 0);
@@ -91,16 +100,24 @@ const goGreen = async (firstLine, secondLine, thirdLine, forthLine) => {
           item.style.backgroundColor = "";
         }, 2000);
       });
+ 
       green.forEach((light) => {
         light.style.backgroundColor = "transparent";
         light.style.boxShadow = "none";
       });
+
       red.forEach((light) => {
         light.style.backgroundColor = "transparent";
         light.style.boxShadow = "none";
       });
-      timer.forEach((time) => (time.style.color = "yellow"));
 
+      timer.forEach((time) => {
+        time.style.color = "yellow";
+        time.innerText = `00`;
+      });
+
+
+      update()
     } else {
       if (currentPosition == 0) {
         time = firstLine;
@@ -114,14 +131,24 @@ const goGreen = async (firstLine, secondLine, thirdLine, forthLine) => {
       if (currentPosition == 3) {
         time = forthLine;
       }
-      if (currentPosition == 4) {
+      if (currentPosition > 3) {
         currentPosition = 0;
+        time = firstLine;
       }
 
+      let decrementTime = time;
+
       // set light according to time
-      green.forEach((light) => {
-        light.style.backgroundColor = "transparent";
-        light.style.boxShadow = "none";
+      green.forEach((light, index) => {
+        if (index != currentPosition) {
+          light.style.backgroundColor = "transparent";
+          light.style.boxShadow = "none";
+        } else {
+          green[currentPosition].style.backgroundColor = "rgb(0, 255, 0)";
+          green[currentPosition].style.boxShadow =
+            "0px 0px 40px rgb(0, 255, 0)";
+          green[currentPosition].style.transition = "all 1s";
+        }
       });
 
       //set light for red
@@ -136,17 +163,58 @@ const goGreen = async (firstLine, secondLine, thirdLine, forthLine) => {
         }
       });
 
-      // at the position light setting
-      green[currentPosition].style.backgroundColor = "rgb(0, 255, 0)";
-      green[currentPosition].style.boxShadow = "0px 0px 40px rgb(0, 255, 0)";
-      green[currentPosition].style.transition = "all 1s";
+      yellow.forEach((light) => {
+        light.style.backgroundColor = "transparent";
+        light.style.boxShadow = "none";
+      }); 
 
-      let decrementTime = time;
-      countdown = setInterval(() => {
+
+      // at the position light setting
+      let countdown = setInterval(() => {
         timer[currentPosition].innerText = `${decrementTime} s`;
         timer[currentPosition].style.color = "green";
 
+        timer.forEach((time, index) => {
+          if (index !== currentPosition) {
+            time.style.color = "red";
+          }
+          if (index == 1 && index !== currentPosition) {
+            timer[1].innerHTML = `${time1} s`;
+          }
+          if (index == 2 && index !== currentPosition) {
+            timer[2].innerHTML = `${time2} s`;
+          }
+          if (index == 3 && index !== currentPosition) {
+            timer[3].innerHTML = `${time3} s`;
+          }
+          if (index == 0 && index !== currentPosition) {
+            timer[0].innerHTML = `${time0} s`;
+          }
+        });
+
         decrementTime--;
+        time0--;
+        time1--;
+        time2--;
+        time3--;
+
+        if (time0 < 0) {
+          time0 = totalTime;
+          console.log("time0 total", totalTime);
+        }
+        if (time1 < 0) {
+          time1 = totalTime + time;
+          console.log("time1 total", totalTime + time);
+          console.log(time);
+        }
+        if (time2 < 0) {
+          time2 = totalTime + time;
+          console.log("time2 total", totalTime);
+        }
+        if (time3 < 0) {
+          time3 = totalTime + time;
+          console.log("time3 total", totalTime);
+        }
 
         if (decrementTime < 0) {
           currentPosition++;
