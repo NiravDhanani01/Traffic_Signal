@@ -13,9 +13,6 @@ let blinking;
 let stopBlinking;
 let timeArray = [];
 
-
-
-
 const startTrafficLight = () => {
   totalTime = parseInt(document.getElementById("userInput").value);
   if (isNaN(totalTime) || totalTime < 50) {
@@ -57,9 +54,9 @@ const trafficLightSimulation = async (
   thirdLine,
   fourthLine
 ) => {
+  clearInterval(blinking);
+  clearInterval(stopBlinking);
   let time;
-  let blinking;
-  let stopBlinking;
   let timeData = await fetch("./data.json");
   let response = await timeData.json();
 
@@ -77,78 +74,36 @@ const trafficLightSimulation = async (
   }, 2000);
 
   function update() {
-    // Yellow light checking
     let jsonTime = response.map((item) => {
-      let [startHour, startMinute] = item.startTime.split("/");
-      let [endHour, endMinute] = item.endTime.split("/");
+      let separateStartTime = item.startTime.split("/");
+      let separateEndTime = item.endTime.split("/");
 
-      let startTime = `${startHour.padStart(2, "0")}${startMinute.padStart(
-        2,
-        "0"
-      )}`;
-      let endTime = `${endHour.padStart(2, "0")}${endMinute.padStart(2, "0")}`;
+      let startHours = separateStartTime[0].padStart(2, 0);
+      let startMinute = separateStartTime[1].padStart(2, 0);
+      let separateEndHour = separateEndTime[0].padStart(2, 0);
+      let separateEndMinute = separateEndTime[1].padStart(2, 0);
+
+      let startTime = `${startHours}${startMinute}`;
+      let endTime = `${separateEndHour}${separateEndMinute}`;
+
       return { startTime, endTime };
     });
+
+    for (let i = 0; i < jsonTime.length; i++) {
+      let start = jsonTime[i].startTime;
+      timeArray.push(start);
+    }
 
     let realTime = JSON.parse(localStorage.getItem("time"));
 
     let check = jsonTime.find(
-      (item) => item.startTime >= realTime && item.endTime < realTime
+      (item) => item.startTime <= realTime && item.endTime > realTime
     );
 
-    if (!check) {
-      // Start yellow blinking
-      yellow.forEach((item) => {
-        blinking = setInterval(() => {
-          item.style.backgroundColor = "yellow";
-          item.style.boxShadow = "0px 0px 40px yellow";
-        }, 1000);
-
-        stopBlinking = setInterval(() => {
-          item.style.boxShadow = "";
-          item.style.backgroundColor = "";
-        }, 2000);
-      });
-
-      // Turn off green and red
-      green.forEach((light) => {
-        light.style.backgroundColor = "transparent";
-        light.style.boxShadow = "none";
-      });
-      red.forEach((light) => {
-        light.style.backgroundColor = "transparent";
-        light.style.boxShadow = "none";
-      });
-      timer.forEach((time) => {
-        time.style.color = "yellow";
-        time.innerText = `00`;
-      });
-
-      if (check.endTime) {
-        let realTime;
-        setInterval(() => {
-          realTime = JSON.parse(localStorage.getItem("time"));
-        }, 1000);
-        let ss = setInterval(() => {
-          console.log("realtime", realTime);
-          console.log("check end ", check.endTime);
-          console.log("check end", check.endTime - realTime);
-          console.log(check.endTime == realTime);
-          if (check.endTime == realTime) {
-            clearInterval(ss);
-            update();
-
-            return;
-          }
-        }, 1000);
-      }
-    }
-    ////////////////////////////////////
-    else {
+    if (check) {
+      console.log("check", check);
       clearInterval(blinking);
       clearInterval(stopBlinking);
-
-      // Green and red light logic
       if (currentPosition == 0) time = firstLine;
       else if (currentPosition == 1) time = secondLine;
       else if (currentPosition == 2) time = thirdLine;
@@ -231,6 +186,64 @@ const trafficLightSimulation = async (
         }
       }, 1000);
     }
+
+    //////////
+    else {
+        console.log("else check");
+        
+      yellow.forEach((item) => {
+        blinking = setInterval(() => {
+          item.style.backgroundColor = "yellow";
+          item.style.boxShadow = "0px 0px 40px yellow";
+        }, 1000);
+
+        stopBlinking = setInterval(() => {
+          item.style.boxShadow = "";
+          item.style.backgroundColor = "";
+        }, 2000);
+      });
+
+      // Turn off green and red
+      green.forEach((light) => {
+        light.style.backgroundColor = "transparent";
+        light.style.boxShadow = "none";
+      });
+      red.forEach((light) => {
+        light.style.backgroundColor = "transparent";
+        light.style.boxShadow = "none";
+      });
+      timer.forEach((time) => {
+        time.style.color = "yellow";
+        time.innerText = `00`;
+      });
+
+      let checkCurrentTime;
+
+      setInterval(() => {
+        checkCurrentTime = JSON.parse(localStorage.getItem("time"));
+      }, 1000);
+
+      let currentInterval = setInterval(() => {
+        let nearestStartTime = timeArray.find(
+          (item) => item >= checkCurrentTime
+        );
+        console.log("nearest Time", nearestStartTime);
+        console.log("current Time", checkCurrentTime);
+
+        console.log(blinking);
+        console.log(stopBlinking);
+        if (nearestStartTime <= checkCurrentTime) {
+          yellow.forEach((light) => {
+            light.style.backgroundColor = "transparent";
+            light.style.boxShadow = "none";
+          });
+          clearInterval(currentInterval);
+          clearInterval(blinking);
+          clearInterval(stopBlinking);
+          update();
+        }
+      }, 1000);
+    }
   }
   update();
 };
@@ -238,3 +251,4 @@ const trafficLightSimulation = async (
 const stop = () => {
   location.reload();
 };
+

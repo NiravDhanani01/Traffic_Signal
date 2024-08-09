@@ -9,6 +9,8 @@ let firstLine = document.getElementById("1st");
 let secondLine = document.getElementById("2nd");
 let thirdLine = document.getElementById("3rd");
 let forthLine = document.getElementById("4th");
+let blinking;
+let stopBlinking;
 
 const startTrafficLight = () => {
   totalTime = parseInt(document.getElementById("userInput").value);
@@ -89,13 +91,13 @@ const trafficLightSimulation = async (
 
     if (check) {
       yellow.forEach((item) => {
-        let blinking = setInterval(() => {
+        blinking = setInterval(() => {
           item.style.backgroundColor = "yellow";
           item.style.boxShadow = " 0px 0px 40px yellow";
           item.style.transition = "all 1s";
         }, 1000);
 
-        let stopBlinking = setInterval(() => {
+        stopBlinking = setInterval(() => {
           item.style.boxShadow = "";
           item.style.backgroundColor = "";
         }, 2000);
