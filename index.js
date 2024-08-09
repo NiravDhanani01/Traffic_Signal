@@ -34,7 +34,7 @@ const startTrafficLight = () => {
   thirdLine = Math.ceil((totalTime * line3) / 100);
   forthLine = Math.ceil((totalTime * line4) / 100);
 
-  goGreen(firstLine, secondLine, thirdLine, forthLine);
+  trafficLightSimulation(firstLine, secondLine, thirdLine, forthLine);
 
   document.querySelector(".startTime").setAttribute("disabled", "disabled");
   document.querySelector(".stopBtn").removeAttribute("disabled", "disabled");
@@ -46,7 +46,12 @@ const startTrafficLight = () => {
 };
 
 // set timer according to ratio, other wise all equal
-const goGreen = async (firstLine, secondLine, thirdLine, fourthLine) => {
+const trafficLightSimulation = async (
+  firstLine,
+  secondLine,
+  thirdLine,
+  fourthLine
+) => {
   let time;
   let timeData = await fetch("./data.json");
   let response = await timeData.json();
@@ -81,6 +86,7 @@ const goGreen = async (firstLine, secondLine, thirdLine, fourthLine) => {
     let check = jsonTime.find((item) => {
       return item.startTime <= realTime && item.endTime >= realTime;
     });
+
     if (check) {
       yellow.forEach((item) => {
         let blinking = setInterval(() => {
@@ -112,6 +118,9 @@ const goGreen = async (firstLine, secondLine, thirdLine, fourthLine) => {
     }
     // green and red light logic start
     else {
+      clearInterval(blinking);
+      clearInterval(stopBlinking);
+
       if (currentPosition == 0) {
         time = firstLine;
       }
